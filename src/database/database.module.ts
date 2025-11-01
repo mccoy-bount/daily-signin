@@ -7,6 +7,7 @@ import * as path from 'node:path'
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env'
     }),
     TypeOrmModule.forRootAsync({
       // type: 'postgres',
@@ -24,7 +25,8 @@ import * as path from 'node:path'
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        url: configService.get('DATABASE_URL'), // 直接使用 DATABASE_URL
+        // url: configService.get('DATABASE_URL'), // 直接使用 DATABASE_URL
+        url: process.env.DATABASE_URL,
         // ssl: true,
         entities: [path.join(__dirname, '..') + '/**/*.entity{.ts,.js}'],
         synchronize: process.env.NODE_ENV !== 'production', // 生产环境关闭
