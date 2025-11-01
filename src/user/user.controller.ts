@@ -1,17 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Body,
-  Param,
-  ParseIntPipe,
-  HttpCode,
-  HttpStatus
-} from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Controller, Get, Post, Body, Param, HttpCode, HttpStatus } from '@nestjs/common'
+import { UserService } from './user.service'
+import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
 
 @Controller('users')
 export class UserController {
@@ -21,13 +11,10 @@ export class UserController {
    * 1. 根据用户名更改 cookie
    * PUT /users/:name/cookie
    */
-  @Put(':name')
+  @Post('update')
   @HttpCode(HttpStatus.OK)
-  async updateUserCookie(
-      @Param('name') name: string,
-      @Body() updateUserDto: UpdateUserDto
-  ) {
-    return this.userService.updateByName(name, updateUserDto);
+  async updateByName(@Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateByName(updateUserDto)
   }
 
   /**
@@ -36,16 +23,21 @@ export class UserController {
    */
   @Get('money')
   async getAllUsersMoney() {
-    return this.userService.findAllUsersMoney();
+    return this.userService.findAllUsersMoney()
+  }
+
+  @Get('all')
+  async findAllUsers() {
+    return this.userService.findAllUsers()
   }
 
   /**
    * 3. 增加一个用户
    * POST /users
    */
-  @Post()
+  @Post('/new')
   @HttpCode(HttpStatus.CREATED)
   async createUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.userService.create(createUserDto)
   }
 }

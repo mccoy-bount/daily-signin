@@ -1,44 +1,38 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column({
     type: 'varchar',
     length: 50,
     unique: true,
-    nullable: false
+    nullable: false,
   })
-  name: string;
+  name: string
 
   @Column({
     type: 'varchar',
     length: 255,
     nullable: false,
-    select: false // 查询时默认不返回密码
+    select: false, // 查询时默认不返回密码
   })
-  password: string;
+  password: string
 
   @Column({
     type: 'text',
     nullable: true,
-    default: null
+    default: null,
   })
-  cookie: string;
+  cookie: string
 
   @Column({
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0.00
+    default: 0.0,
   })
-  money: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  money: number
 }

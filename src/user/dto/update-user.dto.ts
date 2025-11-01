@@ -1,12 +1,21 @@
-import {IsOptional, IsString, MinLength} from 'class-validator';
+import {IsNotEmpty, IsNumber, IsOptional, IsString, Min,} from 'class-validator'
 
 export class UpdateUserDto {
+
   @IsString()
-  @MinLength(6, { message: '密码至少6个字符' })
-  @IsOptional()
-  password?: string;
+  @IsNotEmpty()
+  name: string
 
   @IsString()
   @IsOptional()
-  cookie?: string;
+  password?: string
+
+  @IsString()
+  @IsOptional()
+  cookie?: string
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  money?: number;
 }

@@ -1,21 +1,17 @@
-import { Controller, Post, Get } from '@nestjs/common';
-import { ScheduleService } from './schedule.service';
+import { Controller, Post, Get } from '@nestjs/common'
+import { ScheduleService } from './schedule.service'
 
 @Controller('schedule')
 export class ScheduleController {
   constructor(private readonly scheduleService: ScheduleService) {}
 
-  @Post('trigger')
-  async triggerManualRequest() {
-    return await this.scheduleService.triggerManualRequest();
+  @Post('execute')
+  async executeTask() {
+    return await this.scheduleService.executeTask()
   }
 
-  @Get('health')
-  async healthCheck() {
-    return {
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      service: 'Daily Request Service',
-    };
+  @Post('update')
+  async updateAllUsersMoney() {
+    return await this.scheduleService.updateAllUsersMoney()
   }
 }

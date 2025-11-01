@@ -1,34 +1,33 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm'
 
 @Entity('tasks')
 export class Task {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
+
+  @Column({
+    type: 'varchar',
+    length: 50,
+    unique: true,
+    nullable: false,
+  })
+  name: string
+
+  @Column({
+    type: 'text',
+    nullable: true,
+    default: null,
+  })
+  data: string
 
   @Column()
-  url: string;
+  statusCode: number
 
-  @Column()
-  method: string;
-
-  @Column('jsonb', { nullable: true })
-  payload: any;
-
-  @Column('jsonb', { nullable: true })
-  response: any;
-
-  @Column()
-  statusCode: number;
-
-  @Column()
-  status: 'success' | 'failed';
-
-  @Column({ nullable: true })
-  errorMessage: string;
+  @Column({
+    type: 'boolean',
+  })
+  success: boolean
 
   @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  createdAt: Date
 }

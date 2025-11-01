@@ -15,36 +15,23 @@ export class UserService {
   /**
    * 根据用户名更新 cookie
    */
-  async updateByName(name: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { name } })
+  async updateByName(updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { name: updateUserDto.name } })
 
     if (!user) {
-      throw new NotFoundException(`用户 ${name} 不存在`)
+      throw new NotFoundException(`用户 ${updateUserDto.name} 不存在`)
     }
 
-    // 检查至少提供了一个要更新的字段
-    if (!updateUserDto.password && !updateUserDto.cookie) {
-      throw new BadRequestException('必须提供 password 或 cookie 至少一个字段进行更新')
-    }
-
-    // 只更新提供的字段
-    if (updateUserDto.password !== undefined) {
-      user.password = updateUserDto.password
-    }
-
-    if (updateUserDto.cookie !== undefined) {
-      user.cookie = updateUserDto.cookie
-    }
-
-    return await this.userRepository.save(user)
+    Object.assign(user, updateUserDto)
+    return this.userRepository.save(user)
   }
 
   /**
    * 查询所有用户的 money
    */
-  async findAllUsersMoney(): Promise<{ name: string;password: string; money: number }[]> {
+  async findAllUsersMoney(): Promise<{ name: string; password: string; money: number }[]> {
     const users = await this.userRepository.find({
-      select: ['name', 'password','money'],
+      select: ['name', 'password', 'money'],
     })
 
     return users.map(user => ({
@@ -71,4 +58,7 @@ export class UserService {
     return await this.userRepository.save(user)
   }
 
+  async findAllUsers(): Promise<User[]> {
+    return this.userRepository.find()
+  }
 }
