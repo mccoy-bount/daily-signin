@@ -6,7 +6,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://neondb_owner:npg_7LXm4DiarCgd@ep-odd-meadow-a1b7026u-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      - DATABASE_URL=postgres://koyeb-adm:npg_KoDXHq86UGsz@ep-billowing-fog-a2ncxbm5.eu-central-1.pg.koyeb.app/koyebdb
     env_file:
       - .env
 #    depends_on:
