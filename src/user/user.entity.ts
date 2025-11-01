@@ -29,10 +29,7 @@ export class User {
   cookie: string
 
   @Column({
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
-    default: 0.0,
+    default: 0,
   })
   money: number
 }

@@ -5,28 +5,29 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:n7w4r9kb@postgres-postgresql.ns-c1scx645.svc:5432/postgres
     env_file:
       - .env
-    depends_on:
-      - postgres
+#    depends_on:
+#      - postgres
     volumes:
       - .:/app
       - /app/node_modules
     restart: unless-stopped
 
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./src/database/migrations:/docker-entrypoint-initdb.d
-    restart: unless-stopped
+#  postgres:
+#    image: postgres:15
+#    environment:
+#      POSTGRES_DB: ${DB_NAME}
+#      POSTGRES_USER: ${DB_USERNAME}
+#      POSTGRES_PASSWORD: ${DB_PASSWORD}
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#      - ./src/database/migrations:/docker-entrypoint-initdb.d
+#    restart: unless-stopped
 
 volumes:
   postgres_data:
