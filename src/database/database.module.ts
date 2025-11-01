@@ -25,7 +25,7 @@ import * as path from 'node:path'
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('DATABASE_URL'), // 直接使用 DATABASE_URL
-        ssl: true,
+        // ssl: true,
         entities: [path.join(__dirname, '..') + '/**/*.entity{.ts,.js}'],
         synchronize: process.env.NODE_ENV !== 'production', // 生产环境关闭
       }),
