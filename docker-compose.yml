@@ -6,7 +6,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://root:ORV7e9Db5E1zaqWdZgGf4236IphB0j8N@sjc1.clusters.zeabur.com:30247/zeabur
+      - DATABASE_URL=postgresql://postgres.kmcjsypzhmgncmbnwooc:WuKAkjQCJmhtrbGz@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true
     env_file:
       - .env
 #    depends_on:
