@@ -8,15 +8,12 @@ export class Task {
   @Column({
     type: 'varchar',
     length: 50,
-    unique: true,
-    nullable: false,
   })
   name: string
 
   @Column({
     type: 'text',
     nullable: true,
-    default: null,
   })
   data: string
 
