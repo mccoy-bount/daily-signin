@@ -13,7 +13,8 @@ import * as path from 'node:path'
       imports: [ConfigModule],
       useFactory: () => ({
         type: 'postgres',
-        url: process.env.DATABASE_URL,
+        // url: process.env.DATABASE_URL,
+        url: 'postgresql://postgres.kmcjsypzhmgncmbnwooc:WuKAkjQCJmhtrbGz@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true',
         // ssl: true,
         entities: [path.join(__dirname, '..') + '/**/*.entity{.ts,.js}'],
         synchronize: process.env.NODE_ENV !== 'production', // 生产环境关闭
