@@ -31,10 +31,7 @@ export class ScheduleService {
         success,
       })
       await this.updateUserMoney(user)
-    } catch (err) {
-    }
-
-
+    } catch (err) {}
   }
 
   async updateUserMoney(user: User) {
@@ -69,9 +66,14 @@ export class ScheduleService {
     })
   }
 
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  interviewer() {
+    this.logger.log(`interviewer` + new Date().getUTCHours())
+  }
+
   // 每天上午8点执行 (可以根据环境变量配置)
   // @Cron(CronExpression.EVERY_DAY_AT_5PM)
-  @Cron('45 17 * * *')
+  @Cron('50 17 * * *')
   async triggerManualRequest(): Promise<void> {
     this.logger.log(`triggerManualRequest`)
     await this.executeTask()
