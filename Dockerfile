@@ -1,5 +1,7 @@
 
+
 FROM node:20-alpine
+ENV TZ=Asia/Shanghai
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
