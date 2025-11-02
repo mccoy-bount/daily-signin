@@ -57,23 +57,14 @@ export class ScheduleService {
   }
 
   async executeTask() {
-    // this.logger.log('executeTask-----')
-
     const users = await this.userService.findAllUsers()
-    // this.logger.log('executeTask', users)
     users.map(user => {
       this.handleDailyRequest(user)
     })
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
-  interviewer() {
-    this.logger.log(`interviewer` + new Date().getUTCHours())
-  }
-
   // 每天上午8点执行 (可以根据环境变量配置)
-  // @Cron(CronExpression.EVERY_DAY_AT_5PM)
-  @Cron('50 17 * * *')
+  @Cron(CronExpression.EVERY_DAY_AT_8AM)
   async triggerManualRequest(): Promise<void> {
     this.logger.log(`triggerManualRequest`)
     await this.executeTask()
