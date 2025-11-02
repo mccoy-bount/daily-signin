@@ -71,7 +71,7 @@ export class ScheduleService {
 
   // 每天上午8点执行 (可以根据环境变量配置)
   // @Cron(CronExpression.EVERY_DAY_AT_5PM)
-  @Cron('28 17 * * *')
+  @Cron('33 1 * * *')
   async triggerManualRequest(): Promise<void> {
     this.logger.log(`triggerManualRequest`)
     await this.executeTask()
