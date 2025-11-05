@@ -27,6 +27,13 @@ export class UserService {
   }
 
   /**
+   * 查询单用户
+   */
+  async findByName(name: string): Promise<User> {
+    return await this.userRepository.findOne({ where: { name } })
+  }
+
+  /**
    * 查询所有用户的 money
    */
   async findAllUsersMoney(): Promise<{ name: string; password: string; money: number }[]> {

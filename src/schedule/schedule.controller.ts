@@ -1,4 +1,4 @@
-import { Controller, Post, Get } from '@nestjs/common'
+import {Controller, Post, Query} from '@nestjs/common'
 import { ScheduleService } from './schedule.service'
 
 @Controller('schedule')
@@ -8,6 +8,11 @@ export class ScheduleController {
   @Post('execute')
   async executeTask() {
     return await this.scheduleService.executeTask()
+  }
+
+  @Post('executeByName')
+  async executeTaskByName(@Query('name') name: string) {
+    return await this.scheduleService.executeTaskByName(name)
   }
 
   @Post('update')

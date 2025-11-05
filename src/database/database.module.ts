@@ -19,6 +19,7 @@ import * as path from 'node:path'
         entities: [path.join(__dirname, '..') + '/**/*.entity{.ts,.js}'],
         synchronize: process.env.NODE_ENV !== 'production', // 生产环境关闭
         migrations: ['dist/migrations/*.js'],
+        // logging: true
       }),
       inject: [ConfigService],
     }),
