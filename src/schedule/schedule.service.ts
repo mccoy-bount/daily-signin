@@ -63,6 +63,7 @@ export class ScheduleService {
     users.map(user => {
       this.handleDailyRequest(user)
     })
+    await this.executeTaskByYunTu8()
   }
 
   async executeTaskByName(name: string): Promise<{
@@ -82,6 +83,25 @@ export class ScheduleService {
       data,
       success,
     }
+  }
+
+  async executeTaskByYunTu8(): Promise<{
+    success: boolean
+    data: string
+  }> {
+    try {
+      const { statusCode, data, success } = await this.httpService.checkInRequestByYunTu8()
+      await this.taskService.logTask({
+        name: 'yuntu8',
+        statusCode,
+        data,
+        success,
+      })
+      return {
+        data,
+        success,
+      }
+    } catch (err) {}
   }
 
   // 每天上午8点执行
