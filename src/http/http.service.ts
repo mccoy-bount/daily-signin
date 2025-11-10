@@ -105,7 +105,7 @@ export class HttpService {
     }
   }
 
-  async getYunTu8Nonce(): Promise<{
+  async getYunTu8Nonce(loginCookie: string): Promise<{
     statusCode: number
     data: any
     success: boolean
@@ -114,8 +114,7 @@ export class HttpService {
       const url = 'https://yuntu8.com/'
       const response = await axios.get(url, {
         headers: {
-          Cookie:
-            'wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2024%7C1763718872%7Cu2mjAkk5nq3EnTMJpavAolUk9qmrPjDhd9k7urBMkta%7C681d194b82c2981e526f1b23ffc3dd775f4ae15f00cda2b535d0d2705c2579a2',
+          Cookie: loginCookie,
         },
       })
       return {
@@ -135,7 +134,10 @@ export class HttpService {
   /**
    * @description 云图8签到
    */
-  async checkInRequestByYunTu8(nonce:string): Promise<{
+  async checkInRequestByYunTu8(
+    nonce: string,
+    checkInCookie: string
+  ): Promise<{
     statusCode: number
     data: any
     success: boolean
@@ -154,8 +156,7 @@ export class HttpService {
           nonce,
         },
         headers: {
-          Cookie:
-            'wordpress_25764722f416041464b0663713e06ba5=McCoy2024%7C1763718872%7CLfzOH9s4hD7hp9b0Ql9ORqnZRzLGgxnIVc7EsLq30wH%7Cf10b3a015da23eab165e26fbebd5b6ad6820abbc2be635c38afe98909c9109a5; wordpress_sec_25764722f416041464b0663713e06ba5=McCoy2024%7C1763718872%7Cu2mjAkk5nq3EnTMJpavAolUk9qmrPjDhd9k7urBMkta%7C6c5ca8cbbf14add1283694ec4dce4eddbc3cde686d8c9f6f99cb1f1a29b0dfca; _zb_site_notify_auto=1; Hm_lvt_4a64de5406dfce7063c1933c7c30eadf=1762507925; HMACCOUNT=ADA5B0828E7A3A17; _ga=GA1.1.1512938126.1762507925; __itrace_wid=ef940ea8-cf88-44de-1abf-019d7e9fb9c3; wordpress_test_cookie=WP%20Cookie%20check; _zb_mail_captcha_code=YmUrcmFNNzVqOEE9; wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2024%7C1763718872%7Cu2mjAkk5nq3EnTMJpavAolUk9qmrPjDhd9k7urBMkta%7C681d194b82c2981e526f1b23ffc3dd775f4ae15f00cda2b535d0d2705c2579a2; _ga_6G783YG1DZ=GS2.1.s1762507924$o1$g1$t1762509275$j60$l0$h0; Hm_lpvt_4a64de5406dfce7063c1933c7c30eadf=1762509276',
+          Cookie: checkInCookie,
           'sec-ch-ua-platform': '"macOS"',
           Referer: 'https://yuntu8.com/user/profile/',
           origin: 'https://yuntu8.com',
