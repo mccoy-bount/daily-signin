@@ -17,6 +17,10 @@ export class ScheduleService {
     private readonly taskService: TaskService
   ) {}
 
+  private delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
   /**
    * 单个用户定时请求数据
    * @param user
@@ -66,25 +70,30 @@ export class ScheduleService {
   }
 
   async executeTask() {
-    const users = await this.userService.findAllUsers()
-    users.map(user => {
-      this.handleDailyRequest(user)
-    })
+    const allUsers = await this.userService.findAllUsers()
+    while (allUsers.length) {
+      const users = allUsers.splice(0, 10)
+      users.map(user => {
+        this.handleDailyRequest(user)
+      })
+      await this.delay(1000 * 60)
+    }
+
     // 云图吧任务，等待看看效果
     const users2 = [
       {
         name: 'McCoy2024',
         loginCookie:
-          'wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2024%7C1763908650%7CxAwPofIvJJzx309ddkRbf5IxndyFxZgTRndQNP5PRDD%7Ca4c42ae424ec9eb21df92b497a7aebfe7adc8fd85d6fe33fd6d465c94e7f1577',
+          'wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2024%7C1765195775%7CUFqeXIUBpTpI7iMSi40QfNY56XOI6QzUFqL5GZPrkXO%7C172e5564e0d3bde3ff2bd0ffdede0ef707759895ef4c8957285551692e315873',
         checkInCookie:
-          'wordpress_25764722f416041464b0663713e06ba5=McCoy2024%7C1763908650%7CI7p4Yo7IlUSl8jkydh9krwVmsUR9gMBf1YrpFdFOwtR%7Cae5fe04d575f551561d536f859691fc1d9ae8e5709cbb0ab4ca3242175130e31; wordpress_sec_25764722f416041464b0663713e06ba5=McCoy2024%7C1763908650%7CxAwPofIvJJzx309ddkRbf5IxndyFxZgTRndQNP5PRDD%7Cb00cfb8ee8dbcba2c1e63bbda173b76561c5c72ab9d27d401566ca459bdc3c4e; _ga=GA1.1.1512938126.1762507925; __itrace_wid=ef940ea8-cf88-44de-1abf-019d7e9fb9c3; _zb_mail_captcha_code=YmUrcmFNNzVqOEE9; _gcl_au=1.1.960522452.1762573532; wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2024%7C1763908650%7CxAwPofIvJJzx309ddkRbf5IxndyFxZgTRndQNP5PRDD%7Ca4c42ae424ec9eb21df92b497a7aebfe7adc8fd85d6fe33fd6d465c94e7f1577; _ga_6G783YG1DZ=GS2.1.s1762698511$o5$g1$t1762699674$j60$l0$h0; _zb_site_notify_auto=1; Hm_lvt_4a64de5406dfce7063c1933c7c30eadf=1762571355,1762661876,1762698511,1762781940; Hm_lpvt_4a64de5406dfce7063c1933c7c30eadf=1762781940; HMACCOUNT=ADA5B0828E7A3A17',
+          'wordpress_25764722f416041464b0663713e06ba5=McCoy2024%7C1765195775%7CrkITg8utxZw2w3a1i3M1mo2PM6LC5seVPN9PAFLflYO%7Cc1a35268bd2bbca7d8fa21087acb53f4a8d4e375a6796d542d4953d80e21bf72; wordpress_sec_25764722f416041464b0663713e06ba5=McCoy2024%7C1765195775%7CUFqeXIUBpTpI7iMSi40QfNY56XOI6QzUFqL5GZPrkXO%7C116cdd46fb24e8d01ac09beedd2254bcf2f3ba04a37d9299012f5b5a2d1f6ddf; _zb_site_notify_auto=1; Hm_lvt_4a64de5406dfce7063c1933c7c30eadf=1763986046; HMACCOUNT=D9E505BA8CF67ED1; _ga=GA1.1.1878281386.1763986047; wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2024%7C1765195775%7CUFqeXIUBpTpI7iMSi40QfNY56XOI6QzUFqL5GZPrkXO%7C172e5564e0d3bde3ff2bd0ffdede0ef707759895ef4c8957285551692e315873; _ga_6G783YG1DZ=GS2.1.s1763986046$o1$g1$t1763986178$j13$l0$h0; Hm_lpvt_4a64de5406dfce7063c1933c7c30eadf=1763986178',
       },
       {
         name: 'McCoy2025',
         loginCookie:
-          'wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2025%7C1763992066%7CN835iGy7ZUuOa4dhQOwwSuYZGm7pRYHpzcp6JBFEihs%7Cb94d03a4e6a9e3f4b7294b5f2d903da4ef1aa97439b5e86c9baebac72e93ef81',
+          'wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2025%7C1765199717%7Cm5EmPBXrINAAAtW1o3mzdWsJhtGqnf72LGhrCbJ1po9%7Cf9dc169fffb505353b3574450fd0dbb1866e529d917d5eb6a8e1cf1ddf8aa6fd',
         checkInCookie:
-          'wordpress_25764722f416041464b0663713e06ba5=McCoy2025%7C1763992066%7CNjuQuzGLvSZLe1LUAdTctyq5nXJl23ozCe9IArEAEf5%7C562ed4bd3fee981eded031dd43dec63c8c5340fd76f71c8f27f7ba19991fc67a; wordpress_sec_25764722f416041464b0663713e06ba5=McCoy2025%7C1763992066%7CN835iGy7ZUuOa4dhQOwwSuYZGm7pRYHpzcp6JBFEihs%7C76d777e39bd66f27c958c1b4f6f9e88d561efc1972ae5585d54d05c7bae80956; _zb_site_notify_auto=1; _ga=GA1.1.1257548809.1762782430; Hm_lvt_4a64de5406dfce7063c1933c7c30eadf=1762782430; HMACCOUNT=EBAB582E1712AB2A; wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2025%7C1763992066%7CN835iGy7ZUuOa4dhQOwwSuYZGm7pRYHpzcp6JBFEihs%7Cb94d03a4e6a9e3f4b7294b5f2d903da4ef1aa97439b5e86c9baebac72e93ef81; _ga_6G783YG1DZ=GS2.1.s1762782430$o1$g1$t1762782474$j16$l0$h0; Hm_lpvt_4a64de5406dfce7063c1933c7c30eadf=1762782475',
+          'wordpress_25764722f416041464b0663713e06ba5=McCoy2025%7C1763992066%7CNjuQuzGLvSZLe1LUAdTctyq5nXJl23ozCe9IArEAEf5%7C562ed4bd3fee981eded031dd43dec63c8c5340fd76f71c8f27f7ba19991fc67a; wordpress_sec_25764722f416041464b0663713e06ba5=McCoy2025%7C1763992066%7CN835iGy7ZUuOa4dhQOwwSuYZGm7pRYHpzcp6JBFEihs%7C76d777e39bd66f27c958c1b4f6f9e88d561efc1972ae5585d54d05c7bae80956; _zb_site_notify_auto=1; _ga=GA1.1.1257548809.1762782430; Hm_lvt_4a64de5406dfce7063c1933c7c30eadf=1762782430; HMACCOUNT=EBAB582E1712AB2A; wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2025%7C1765199717%7Cm5EmPBXrINAAAtW1o3mzdWsJhtGqnf72LGhrCbJ1po9%7Cf9dc169fffb505353b3574450fd0dbb1866e529d917d5eb6a8e1cf1ddf8aa6fd; _ga_6G783YG1DZ=GS2.1.s1762782430$o1$g1$t1762782474$j16$l0$h0; Hm_lpvt_4a64de5406dfce7063c1933c7c30eadf=1762782475',
       },
     ]
     users2.map(async user => {
@@ -172,7 +181,7 @@ export class ScheduleService {
   }
 
   // 每个月执行1次
-  @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT)
+  @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_NOON)
   async triggerUpdateAllUsersMoney(): Promise<void> {
     await this.updateAllUsersMoney()
   }
