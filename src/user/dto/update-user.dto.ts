@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsNumber, IsOptional, IsString, Min,} from 'class-validator'
+import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator'
 
 export class UpdateUserDto {
 
@@ -18,4 +18,8 @@ export class UpdateUserDto {
   @Min(0)
   @IsOptional()
   money?: number;
+
+  @IsNumber()
+  @IsOptional()
+  lastModify?: number
 }

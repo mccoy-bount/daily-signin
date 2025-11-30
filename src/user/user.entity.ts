@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 @Entity('users')
 export class User {
@@ -32,4 +32,15 @@ export class User {
     default: 0,
   })
   money: number
+
+  @Column({
+    default: 0,
+    nullable: true,
+  })
+  lastModify: number
+
+  @Column({
+    nullable: true,
+  })
+  updated_at: Date
 }

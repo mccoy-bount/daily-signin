@@ -25,4 +25,9 @@ export class ScheduleController {
   async updateAllUsersMoney() {
     return await this.scheduleService.updateAllUsersMoney()
   }
+
+  @Post('updateLastModifyDate')
+  async updateLastModifyDate() {
+    return await this.scheduleService.updateLastModifyDate()
+  }
 }

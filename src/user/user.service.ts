@@ -22,6 +22,10 @@ export class UserService {
       throw new NotFoundException(`用户 ${updateUserDto.name} 不存在`)
     }
 
+    if(updateUserDto.cookie != user.cookie) {
+      user.updated_at = new Date()
+    }
+
     Object.assign(user, updateUserDto)
     return this.userRepository.save(user)
   }
@@ -61,7 +65,13 @@ export class UserService {
       throw new ConflictException('用户名已存在')
     }
 
-    const user = this.userRepository.create(createUserDto)
+    const user = this.userRepository.create({
+      name: createUserDto.name,
+      password: createUserDto.password,
+      cookie: createUserDto.cookie,
+      money: 0,
+      updated_at: new Date(),
+    })
     return await this.userRepository.save(user)
   }
 

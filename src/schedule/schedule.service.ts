@@ -6,6 +6,8 @@ import { UserService } from '../user/user.service'
 import { User } from '../user/user.entity'
 import { TaskService } from '../task/task.service'
 import { CreateUserDto } from 'src/user/dto/create-user.dto'
+import { UpdateUserDto } from '../user/dto/update-user.dto'
+import { asyncWrapProviders } from 'async_hooks'
 
 @Injectable()
 export class ScheduleService {
@@ -28,7 +30,6 @@ export class ScheduleService {
   async handleDailyRequest(user: User) {
     try {
       const { statusCode, data, success } = await this.httpService.checkInRequest(user.cookie)
-      // this.logger.log(`handleDailyRequest:${user.name}: statusCode:${statusCode},success:${success}, data:${data}`)
       await this.taskService.logTask({
         name: user.name,
         statusCode,
@@ -62,11 +63,22 @@ export class ScheduleService {
     return await this.handleDailyRequest(createUserDto as User)
   }
 
+  public async updateUserAndCheckin(updateUserDto: UpdateUserDto) {
+    const result = await this.userService.updateByName(updateUserDto)
+    // this.logger.log(`User ${result.name} created`)
+    return await this.handleDailyRequest(updateUserDto as User)
+  }
+
   async updateAllUsersMoney() {
-    const users = await this.userService.findAllUsers()
-    users.map(async user => {
-      await this.updateUserMoney(user)
-    })
+    const allUsers = await this.userService.findAllUsers()
+    while (allUsers.length) {
+      const users = allUsers.splice(0, 10)
+      users.map(user => {
+        // if(user.name !== 'mccoy2025') return false
+        this.updateUserMoney(user)
+      })
+      await this.delay(1000 * 60)
+    }
   }
 
   async executeTask() {
@@ -174,14 +186,36 @@ export class ScheduleService {
     }
   }
 
+  async updateLastModifyDate() {
+    const users = await this.userService.findAllUsers()
+    users.forEach(user => {
+      // if(user.name !== 'mccoy2025') return false
+      const end = user.updated_at
+      const endDate = new Date(end).getTime()
+      const nowDay = new Date().getTime()
+      const days = Math.floor((nowDay - endDate) / (24 * 60 * 60 * 1000))
+      // console.log(user.name, endDate, nowDay, days)
+      this.userService.updateByName( {
+        name: user.name,
+        lastModify: days,
+      })
+    })
+  }
+
   // 每天上午8点执行
   @Cron(CronExpression.EVERY_DAY_AT_8AM)
   async triggerManualRequest(): Promise<void> {
     await this.executeTask()
   }
 
-  // 每个月执行1次
-  @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_NOON)
+  // 每天上午9点执行， 更新最后更新日期
+  @Cron(CronExpression.EVERY_DAY_AT_9AM)
+  async triggerUpdateLastModifyDate(): Promise<void> {
+    await this.updateLastModifyDate()
+  }
+
+  // 每周日执行10点，1次
+  @Cron('0 10 * * 0')
   async triggerUpdateAllUsersMoney(): Promise<void> {
     await this.updateAllUsersMoney()
   }

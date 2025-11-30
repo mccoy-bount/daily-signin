@@ -1,4 +1,4 @@
-import { IsNotEmpty, isNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator'
+import { IsNotEmpty, IsString } from 'class-validator'
 
 export class LogTaskDto {
   @IsNotEmpty()
@@ -10,4 +10,5 @@ export class LogTaskDto {
   statusCode: number
 
   success: boolean
+
 }
