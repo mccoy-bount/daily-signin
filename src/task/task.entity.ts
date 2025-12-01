@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('tasks')
 export class Task {
@@ -25,8 +25,6 @@ export class Task {
   })
   success: boolean
 
-  @Column({
-    type: Date,
-  })
+  @CreateDateColumn()
   createdAt: Date
 }

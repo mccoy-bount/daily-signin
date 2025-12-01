@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common'
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { User } from './user.entity'
@@ -24,6 +24,7 @@ export class UserService {
 
     if(updateUserDto.cookie  && updateUserDto.cookie != user.cookie) {
       user.updated_at = new Date()
+      user.lastModify = 0
     }
 
     Object.assign(user, updateUserDto)
