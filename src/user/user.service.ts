@@ -22,7 +22,7 @@ export class UserService {
       throw new NotFoundException(`用户 ${updateUserDto.name} 不存在`)
     }
 
-    if(updateUserDto.cookie  && updateUserDto.cookie != user.cookie) {
+    if (updateUserDto.cookie && updateUserDto.cookie != user.cookie) {
       user.updated_at = new Date()
       user.lastModify = 0
     }
