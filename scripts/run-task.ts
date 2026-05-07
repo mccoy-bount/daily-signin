@@ -8,14 +8,12 @@ async function runManualTask() {
   try {
     const user = {
       name: '',
-      cookie:''
-
-
+      cookie: '',
     }
 
-    const result = await scheduleService.updateUserAndCheckin(user)
     // const result = await scheduleService.addUserAndCheckin(user)
-    // const result = await scheduleService.executeTaskByYunTu8(user)
+    // const result = await scheduleService.executeTask()
+    const result = await scheduleService.triggerUpdateAllUsersMoney()
     console.log('✅ 任务完成:', result)
   } catch (error) {
     console.error('❌ 执行失败:', error)

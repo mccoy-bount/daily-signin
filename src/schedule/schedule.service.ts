@@ -71,7 +71,7 @@ export class ScheduleService {
   }
 
   async updateAllUsersMoney() {
-    const allUsers = await this.userService.findAllUsers()
+    const allUsers = await this.userService.getNotExpiredUsers()
     while (allUsers.length) {
       const users = allUsers.splice(0, 10)
       users.map(user => {
@@ -83,7 +83,7 @@ export class ScheduleService {
   }
 
   async executeTask() {
-    const allUsers = await this.userService.findAllUsers()
+    const allUsers = await this.userService.getNotExpiredUsers()
     while (allUsers.length) {
       const users = allUsers.splice(0, 10)
       users.map(user => {
@@ -91,31 +91,6 @@ export class ScheduleService {
       })
       await this.delay(1000 * 60)
     }
-
-
-  }
-
-  async executeTaskYunTu8(){
-    // 云图吧任务，等待看看效果
-    const users = [
-      {
-        name: 'McCoy2024',
-        loginCookie:
-          'wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2024%7C1770118003%7CevpwoMd1CUBwX8EOb3D0h5ZnqYJQYZzuj81PqM6ca7o%7Ca856b39925a47a81d44f479df6ac968aa297b3bb312fe005ea73a72cec20e9b5',
-        checkInCookie:
-          'wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2024%7C1770118003%7CevpwoMd1CUBwX8EOb3D0h5ZnqYJQYZzuj81PqM6ca7o%7Ca856b39925a47a81d44f479df6ac968aa297b3bb312fe005ea73a72cec20e9b5; wordpress_sec_25764722f416041464b0663713e06ba5=McCoy2024%7C1765195775%7CUFqeXIUBpTpI7iMSi40QfNY56XOI6QzUFqL5GZPrkXO%7C116cdd46fb24e8d01ac09beedd2254bcf2f3ba04a37d9299012f5b5a2d1f6ddf; _zb_site_notify_auto=1; Hm_lvt_4a64de5406dfce7063c1933c7c30eadf=1763986046; HMACCOUNT=D9E505BA8CF67ED1; _ga=GA1.1.1878281386.1763986047; wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2024%7C1765195775%7CUFqeXIUBpTpI7iMSi40QfNY56XOI6QzUFqL5GZPrkXO%7C172e5564e0d3bde3ff2bd0ffdede0ef707759895ef4c8957285551692e315873; _ga_6G783YG1DZ=GS2.1.s1763986046$o1$g1$t1763986178$j13$l0$h0; Hm_lpvt_4a64de5406dfce7063c1933c7c30eadf=1763986178',
-      },
-      {
-        name: 'McCoy2025',
-        loginCookie:
-          'wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2025%7C1770117500%7CwTHnESSPwsG1dzo2HW5A1knHvrD7BPLLPlMG4AWOaoh%7C875e1bd81b29be8b701e58215f30cd3bf9d0a1710d1c878720fe5d2d87efe907',
-        checkInCookie:
-          'wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2025%7C1770117500%7CwTHnESSPwsG1dzo2HW5A1knHvrD7BPLLPlMG4AWOaoh%7C875e1bd81b29be8b701e58215f30cd3bf9d0a1710d1c878720fe5d2d87efe907; wordpress_sec_25764722f416041464b0663713e06ba5=McCoy2025%7C1763992066%7CN835iGy7ZUuOa4dhQOwwSuYZGm7pRYHpzcp6JBFEihs%7C76d777e39bd66f27c958c1b4f6f9e88d561efc1972ae5585d54d05c7bae80956; _zb_site_notify_auto=1; _ga=GA1.1.1257548809.1762782430; Hm_lvt_4a64de5406dfce7063c1933c7c30eadf=1762782430; HMACCOUNT=EBAB582E1712AB2A; wordpress_logged_in_25764722f416041464b0663713e06ba5=McCoy2025%7C1765199717%7Cm5EmPBXrINAAAtW1o3mzdWsJhtGqnf72LGhrCbJ1po9%7Cf9dc169fffb505353b3574450fd0dbb1866e529d917d5eb6a8e1cf1ddf8aa6fd; _ga_6G783YG1DZ=GS2.1.s1762782430$o1$g1$t1762782474$j16$l0$h0; Hm_lpvt_4a64de5406dfce7063c1933c7c30eadf=1762782475',
-      }
-    ]
-    users.map(async user => {
-      await this.executeTaskByYunTu8(user)
-    })
   }
 
   async executeTaskByName(name: string): Promise<{
@@ -134,60 +109,6 @@ export class ScheduleService {
     return {
       data,
       success,
-    }
-  }
-
-  async executeTaskByYunTu8({
-    name,
-    loginCookie,
-    checkInCookie,
-  }: {
-    loginCookie: string
-    checkInCookie: string
-    name: string
-  }): Promise<{
-    success: boolean
-    data: string
-  }> {
-    const { data: html, success: success1 } = await this.httpService.getYunTu8Nonce(loginCookie)
-    if (success1) {
-      const $ = cheerio.load(html as string)
-      const str = $('#main-js-extra').text()
-
-      function getAjaxNonce(str: string) {
-        try {
-          // 使用正则表达式匹配从 { 开始到 } 结束的JSON部分
-          const jsonMatch = str.match(/\{[\s\S]*\}/)
-          if (jsonMatch) {
-            const jsonStr = jsonMatch[0]
-            const zb = JSON.parse(jsonStr)
-            return zb.ajax_nonce
-          }
-          return null
-        } catch (error) {
-          return null
-        }
-      }
-
-      const nonce = getAjaxNonce(str)
-      // console.log(nonce)
-      const { statusCode, data, success } = await this.httpService.checkInRequestByYunTu8(nonce, checkInCookie)
-      await this.taskService.logTask({
-        name: `yuntu8-${name}`,
-        statusCode,
-        data,
-        success,
-      })
-      // console.log(data)
-      return {
-        data,
-        success,
-      }
-    } else {
-      return {
-        data: '云图8获取ajax_nonce失败',
-        success: false,
-      }
     }
   }
 
@@ -212,12 +133,6 @@ export class ScheduleService {
   async triggerManualRequest(): Promise<void> {
     await this.executeTask()
   }
-
-  // 每天上午8点执行
-  // @Cron(CronExpression.EVERY_DAY_AT_8AM)
-  // async triggerManualRequestYunTu8(): Promise<void> {
-  //   await this.executeTaskYunTu8()
-  // }
 
   // 每天上午9点执行， 更新最后更新日期
   @Cron(CronExpression.EVERY_DAY_AT_9AM)

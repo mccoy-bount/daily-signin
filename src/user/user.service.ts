@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { LessThan, Repository } from 'typeorm'
 import { User } from './user.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
@@ -78,5 +78,12 @@ export class UserService {
 
   async findAllUsers(): Promise<User[]> {
     return this.userRepository.find()
+  }
+  async getNotExpiredUsers(): Promise<User[]> {
+    return this.userRepository.find({
+      where: {
+        lastModify: LessThan(14),
+      },
+    })
   }
 }
